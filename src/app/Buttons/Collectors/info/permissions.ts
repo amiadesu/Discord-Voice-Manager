@@ -6,7 +6,7 @@ import Client from '../../../../strcut/Client';
 import { i18n } from '../../../../i18n';
 
 export default async (client: Client, button: ButtonInteraction<'cached'>, btn: ButtonInteraction<'cached'>, config: IGuildConfig) => {
-    const channel = btn.guild.channels.cache.get(btn.customId.split('.')[1])
+    const channel = btn.guild.channels.cache.get(btn.customId.split('.')[1]);
 
     if(!channel || channel.type !== ChannelType.GuildVoice) {
         return button.editReply({
