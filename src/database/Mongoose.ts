@@ -6,10 +6,11 @@ export default class Mongoose {
     readonly rooms: RoomManager = new RoomManager()
 
     constructor(
-        private client: Client
+        private readonly client: Client
     ) {}
 
     async connect() {
+        mongoose.set('strictQuery', true);
         await mongoose.connect(
             this.client.config.internal.mongoURL,
             {
@@ -21,7 +22,7 @@ export default class Mongoose {
             await this.init()
             this.client.logger.login(`База данных MongoDB подключена`)
         })
-        .catch((err: Error) => console.log(err))
+        .catch((err: Error) => console.log(err));
     }
 
     async init() {

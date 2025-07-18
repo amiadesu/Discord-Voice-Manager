@@ -2,7 +2,7 @@ import { ChannelType, OverwriteType, PermissionFlagsBits, VoiceState } from 'dis
 import Client from '../Client';
 
 export default class VoiceManager {
-    private permissionsRoomOwner = {
+    private static readonly permissionsRoomOwner = {
         allow: [
             PermissionFlagsBits.Speak,
             PermissionFlagsBits.Stream,
@@ -10,15 +10,29 @@ export default class VoiceManager {
             PermissionFlagsBits.Connect,
             PermissionFlagsBits.ViewChannel,
             PermissionFlagsBits.PrioritySpeaker,
-            PermissionFlagsBits.CreateInstantInvite
+            PermissionFlagsBits.MuteMembers,
+            PermissionFlagsBits.DeafenMembers,
+            PermissionFlagsBits.MoveMembers,
+            PermissionFlagsBits.ManageEvents,
+            PermissionFlagsBits.CreateInstantInvite,
+            PermissionFlagsBits.SendMessages,            // If the channel has a chat
+            PermissionFlagsBits.SendTTSMessages,
+            PermissionFlagsBits.EmbedLinks,
+            PermissionFlagsBits.AttachFiles,
+            PermissionFlagsBits.ReadMessageHistory,
+            PermissionFlagsBits.UseApplicationCommands,  // For using slash commands
+            PermissionFlagsBits.UseEmbeddedActivities,   // For Discord activities like YouTube Together
+            PermissionFlagsBits.RequestToSpeak,
+            PermissionFlagsBits.UseSoundboard,
+            PermissionFlagsBits.UseExternalSounds
         ],
         deny: [
-            PermissionFlagsBits.MoveMembers,
+            PermissionFlagsBits.ManageChannels,
             PermissionFlagsBits.ManageRoles,
             PermissionFlagsBits.ManageWebhooks,
-            PermissionFlagsBits.ManageChannels
+            PermissionFlagsBits.MentionEveryone          // Prevent pinging @everyone and @here
         ]
-    }
+    };
 
     static async onRoomJoin(client: Client, newState: VoiceState) {
         const { member, channel, guild } = newState
@@ -54,7 +68,8 @@ export default class VoiceManager {
                     permissionOverwrites: [
                         {
                             id: member.id,
-                            ...this.prototype.permissionsRoomOwner,
+                            allow: VoiceManager.permissionsRoomOwner.allow,
+                            deny: VoiceManager.permissionsRoomOwner.deny,
                             type: OverwriteType.Member
                         }
                     ],
