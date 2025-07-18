@@ -1,6 +1,7 @@
 import mongoose from 'mongoose'
 import Client from '../strcut/Client'
 import RoomManager from './room/RoomManager'
+import { i18n } from '../i18n'
 
 export default class Mongoose {
     readonly rooms: RoomManager = new RoomManager()
@@ -20,7 +21,7 @@ export default class Mongoose {
         )
         .then(async () => {
             await this.init()
-            this.client.logger.login(`База данных MongoDB подключена`)
+            this.client.logger.login(i18n.t("logs.mongodb_connected"))
         })
         .catch((err: Error) => console.log(err));
     }

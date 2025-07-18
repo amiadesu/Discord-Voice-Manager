@@ -1,6 +1,7 @@
 import { VoiceChannel } from 'discord.js';
 import EmbedBuilder from '../../strcut/utils/EmbedBuilder';
 import Interaction from '../../strcut/base/Interaction';
+import { i18n } from '../../i18n';
 
 export default new Interaction(
     'rename',
@@ -17,7 +18,7 @@ export default new Interaction(
                     embeds: [ new EmbedBuilder().default(
                         modal.member,
                         config.buttons[modal.customId]!.title,
-                        `**приватную комнату** ${voice.toString()} можно будет **переименовать** через **<t:${Math.round(res.cooldown/1000)}:R>**`        
+                        i18n.t("modals.rename.cooldown", { voice_name: voice.toString(), cooldown: Math.round(res.cooldown/1000) })
                     ) ]
                 })
             }
@@ -33,7 +34,7 @@ export default new Interaction(
             embeds: [ new EmbedBuilder().default(
                 modal.member,
                 config.buttons[modal.customId]!.title,
-                `Вы **установили** новое имя для своей **приватной комнаты** ${voice.toString()}`
+                i18n.t("modals.rename.success", { voice_name: voice.toString() })
             ) ]
         })
     }

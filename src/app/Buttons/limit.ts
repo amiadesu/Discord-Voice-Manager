@@ -2,6 +2,7 @@ import { ActionRowBuilder, ButtonInteraction, ModalBuilder, TextInputBuilder, Te
 import Interaction from '../../strcut/base/Interaction';
 import IGuildConfig from '../../types/GuildConfig';
 import Client from '../../strcut/Client';
+import { i18n } from '../../i18n';
 
 export default new Interaction(
     'limit',
@@ -16,8 +17,8 @@ export default new Interaction(
                     new TextInputBuilder()
                     .setStyle(TextInputStyle.Short)
                     .setCustomId('count')
-                    .setLabel('Новое количество слотов')
-                    .setPlaceholder('Укажите новое количество слотов')
+                    .setLabel(i18n.t("modals.info.label"))
+                    .setPlaceholder(i18n.t("modals.info.placeholder"))
                     .setValue(String(button.member.voice.channel!.userLimit))
                     .setMaxLength(2)
                     .setMinLength(1)

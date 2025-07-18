@@ -1,6 +1,7 @@
 import { VoiceChannel } from 'discord.js';
 import EmbedBuilder from '../../strcut/utils/EmbedBuilder';
 import Interaction from '../../strcut/base/Interaction';
+import { i18n } from '../../i18n';
 
 export default new Interaction(
     'limit',
@@ -14,7 +15,7 @@ export default new Interaction(
                 embeds: [ new EmbedBuilder().default(
                     modal.member,
                     config.buttons[modal.customId]!.title,
-                    `**количество** слотов должно быть **положительным** числом`
+                    i18n.t("modals.limit.slots_number_must_be_positive")
                 ) ]
             })
         }
@@ -30,7 +31,7 @@ export default new Interaction(
             embeds: [ new EmbedBuilder().default(
                 modal.member,
                 config.buttons[modal.customId]!.title,
-                `Вы **установили** новое количество **слотов** для своей **приватной комнаты** ${modal.member.voice.channel!.toString()}`
+                i18n.t("modals.limit.slots_number_change_success", { voice_name: modal.member.voice.channel!.toString() })
             ) ]
         })
     }

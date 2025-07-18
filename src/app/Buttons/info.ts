@@ -4,18 +4,21 @@ import EmbedBuilder from '../../strcut/utils/EmbedBuilder';
 import Interaction from '../../strcut/base/Interaction';
 import IGuildConfig from '../../types/GuildConfig';
 import Client from '../../strcut/Client';
+import { i18n } from '../../i18n';
 
 export default new Interaction(
     'info',
     async (client: Client, button: ButtonInteraction<'cached'> , config: IGuildConfig): Promise<any> => {
-        await button.deferReply({ephemeral: true, fetchReply: true })
+        await button.deferReply({ephemeral: true })
 
-        const fetch = await button.editReply({
+        const fetch = await button.fetchReply();
+
+        await button.editReply({
             embeds: [
                 new EmbedBuilder().default(
                     button.member,
                     config.buttons[button.customId]!.title,
-                    `выберите **приватную комнату**`
+                    i18n.t("messages.select_private_room")
                 )
             ],
             components: [
@@ -71,7 +74,7 @@ export default new Interaction(
                         new EmbedBuilder().default(
                             button.member,
                             config.buttons[button.customId]!.title,
-                            `Время на **ответ** вышло`
+                            i18n.t("messages.response_timeout")
                         )
                     ],
                     components: [ new ActionRowBuilder().menuChannel('info', config.placeholder.channel, true) ]

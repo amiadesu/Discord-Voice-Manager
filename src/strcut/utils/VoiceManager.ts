@@ -1,5 +1,6 @@
 import { ChannelType, OverwriteType, PermissionFlagsBits, VoiceState } from 'discord.js';
 import Client from '../Client';
+import { i18n } from '../../i18n';
 
 export default class VoiceManager {
     private static readonly permissionsRoomOwner = {
@@ -15,13 +16,13 @@ export default class VoiceManager {
             PermissionFlagsBits.MoveMembers,
             PermissionFlagsBits.ManageEvents,
             PermissionFlagsBits.CreateInstantInvite,
-            PermissionFlagsBits.SendMessages,            // If the channel has a chat
+            PermissionFlagsBits.SendMessages,
             PermissionFlagsBits.SendTTSMessages,
             PermissionFlagsBits.EmbedLinks,
             PermissionFlagsBits.AttachFiles,
             PermissionFlagsBits.ReadMessageHistory,
-            PermissionFlagsBits.UseApplicationCommands,  // For using slash commands
-            PermissionFlagsBits.UseEmbeddedActivities,   // For Discord activities like YouTube Together
+            PermissionFlagsBits.UseApplicationCommands,
+            PermissionFlagsBits.UseEmbeddedActivities,
             PermissionFlagsBits.RequestToSpeak,
             PermissionFlagsBits.UseSoundboard,
             PermissionFlagsBits.UseExternalSounds
@@ -30,14 +31,14 @@ export default class VoiceManager {
             PermissionFlagsBits.ManageChannels,
             PermissionFlagsBits.ManageRoles,
             PermissionFlagsBits.ManageWebhooks,
-            PermissionFlagsBits.MentionEveryone          // Prevent pinging @everyone and @here
+            PermissionFlagsBits.MentionEveryone
         ]
     };
 
     static async onRoomJoin(client: Client, newState: VoiceState) {
         const { member, channel, guild } = newState
         if(!member || !guild || !channel) return
-        const config = client.config.guilds.get(guild.id)
+        const config = client.guildsConfig.get(guild.id)
         if(!config) return
 
         if (channel.id === config.channels.voice) {
@@ -73,14 +74,14 @@ export default class VoiceManager {
                             type: OverwriteType.Member
                         }
                     ],
-                    reason: 'Создание приватной комнаты'
+                    reason: i18n.t("messages.private_room_creation")
                 }
             ).then(async channel => {
                 return member?.voice?.setChannel(channel.id).then(async () => {
                     room.channelId = channel.id
                     room.name = channel.name
                     await client.db.rooms.save(room)
-                }).catch(async () => await channel.delete('Защита от ддоса приватных комнат').catch(() => {}))
+                }).catch(async () => await channel.delete(i18n.t("messages.ddos_protection")).catch(() => {}))
             })
         }
     }
@@ -88,7 +89,7 @@ export default class VoiceManager {
     static async onRoomLeave(client: Client, oldState: VoiceState) {
         const { member, channel, guild } = oldState
         if(!member || !guild || !channel) return
-        const config = client.config.guilds.get(guild.id)
+        const config = client.guildsConfig.get(guild.id)
         if(!config) return
 
         const room = await client.db.rooms.findChannel(channel.id)
@@ -96,7 +97,7 @@ export default class VoiceManager {
         if(channel.parent.id !== config.channels.category) return
 
         if(channel.members.size === 0) {
-            if(channel.parent.id === config.channels.category) await channel.delete('Выход из комнаты').catch(() => {})
+            if(channel.parent.id === config.channels.category) await channel.delete(i18n.t("messages.last_user_disconnected")).catch(() => {})
         }
 
         if(room && room?.userId === member.id) {

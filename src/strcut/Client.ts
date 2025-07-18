@@ -15,6 +15,8 @@ export default class Client extends DJSClient {
 
     readonly config = config
 
+    guildsConfig = config.getGuilds()
+
     events: EventHandler = new EventHandler(this)
 
     buttons: InteractionHandler = new InteractionHandler('Buttons')

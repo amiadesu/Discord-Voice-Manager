@@ -3,6 +3,7 @@ import ActionRowBuilder from '../../../../strcut/utils/ActionRowBuilder';
 import EmbedBuilder from '../../../../strcut/utils/EmbedBuilder';
 import IGuildConfig from '../../../../types/GuildConfig';
 import Client from '../../../../strcut/Client';
+import { i18n } from '../../../../i18n';
 
 export default async (client: Client, button: ButtonInteraction<'cached'>, menu: ChannelSelectMenuInteraction<'cached'>, config: IGuildConfig) => {
     if(menu.channels.size === 0) {
@@ -10,7 +11,7 @@ export default async (client: Client, button: ButtonInteraction<'cached'>, menu:
             embeds: [ new EmbedBuilder().default(
                 menu.member,
                 config.buttons[button.customId]!.title,
-                `Вы **не** выбрали канал`
+                i18n.t("info.channel_not_chosen")
             ) ],
             components: []
         })
@@ -24,7 +25,7 @@ export default async (client: Client, button: ButtonInteraction<'cached'>, menu:
             embeds: [ new EmbedBuilder().default(
                 menu.member,
                 config.buttons[button.customId]!.title,
-                `**выбранный** голосовой канал **не** найден или **не** является **приватной комнатой**`
+                i18n.t("info.not_private_room")
             ) ],
             components: []
         })

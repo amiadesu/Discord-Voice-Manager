@@ -3,6 +3,7 @@ import { ButtonRun, ModalRun } from '../../types/base/Interaction';
 import EmbedBuilder from '../../strcut/utils/EmbedBuilder';
 import Event from '../../strcut/base/Event';
 import Client from '../../strcut/Client';
+import { i18n } from '../../i18n';
 
 export default new Event(
     {
@@ -12,9 +13,9 @@ export default new Event(
         const member = interaction.member as GuildMember
 
         if(interaction.isButton()) {
-            const config = client.config.guilds.get(member.guild.id)
+            const config = client.guildsConfig.get(member.guild.id)
             if(!config) {
-                return interaction.reply({ content: 'Нет конфига под эту гильдию', ephemeral: true })
+                return interaction.reply({ content: i18n.t("messages.no_guild_config"), ephemeral: true })
             }
 
             const get = client.util.getButton(interaction.customId)
@@ -24,8 +25,8 @@ export default new Event(
                     return interaction.reply({
                         embeds: [ new EmbedBuilder().default(
                             member,
-                            config!.buttons[interaction.customId]?.title || 'Неизвестная интеракция',
-                            'Вы **не** находитесь в **своей** приватной комнате'
+                            config!.buttons[interaction.customId]?.title || i18n.t("messages.unknown_interaction"),
+                            i18n.t("messages.not_in_own_private_room")
                         ) ], ephemeral: true
                     })
                 }
@@ -35,9 +36,9 @@ export default new Event(
         }
 
         if(interaction.isModalSubmit()) {
-            const config = client.config.guilds.get(interaction.guild!.id)
+            const config = client.guildsConfig.get(interaction.guild!.id)
             if(!config) {
-                return interaction.reply({ content: 'Нет конфига под эту гильдию', ephemeral: true })
+                return interaction.reply({ content: i18n.t("messages.no_guild_config"), ephemeral: true })
             }
 
             const get = client.util.getModal(interaction.customId)
@@ -47,8 +48,8 @@ export default new Event(
                     return interaction.reply({
                         embeds: [ new EmbedBuilder().default(
                             member,
-                            config!.buttons[interaction.customId]?.title || 'Неизвестная интеракция',
-                            'Вы **не** находитесь в **своей** приватной комнате'
+                            config!.buttons[interaction.customId]?.title || i18n.t("messages.unknown_interaction"),
+                            i18n.t("messages.not_in_own_private_room")
                         ) ], ephemeral: true
                     })
                 }
@@ -56,7 +57,7 @@ export default new Event(
                 return (get.run as ModalRun)(client, interaction as ModalSubmitInteraction<'cached'>, config, room)
             } else {
                 if(!interaction.replied && !interaction.deferred) {
-                    return interaction.reply({ content: 'Неизвестная интеракция', ephemeral: true })
+                    return interaction.reply({ content: i18n.t("messages.unknown_interaction"), ephemeral: true })
                 }
             }
         }

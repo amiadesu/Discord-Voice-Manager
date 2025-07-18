@@ -3,6 +3,7 @@ import EmbedBuilder from '../../strcut/utils/EmbedBuilder';
 import Interaction from '../../strcut/base/Interaction';
 import IGuildConfig from '../../types/GuildConfig';
 import Client from '../../strcut/Client';
+import { i18n } from '../../i18n';
 
 export default new Interaction(
     'hide',
@@ -25,7 +26,7 @@ export default new Interaction(
             embeds: [ new EmbedBuilder().default(
                 button.member,
                 config.buttons[button.customId]!.title,
-                `Вы успешно **${state?'раскрыли':'скрыли'}** комнату ${voice.toString()} от @everyone`
+                i18n.t(`messages.room_visibility_change_success.${state ? 'allow' : 'deny'}`, { voice_name: voice.toString() })
             ) ]
         })
     }

@@ -1,4 +1,5 @@
 import { ActionRowBuilder as DJSActionRowBuilder, ButtonBuilder, ButtonStyle, ChannelSelectMenuBuilder, UserSelectMenuBuilder, VoiceChannel } from 'discord.js';
+import { i18n } from '../../i18n';
 
 export default class ActionRowBuilder {
     menuUser(customId: string, placeholder?: string, disabled?: boolean) {
@@ -7,7 +8,7 @@ export default class ActionRowBuilder {
             .addComponents(
                 new UserSelectMenuBuilder()
                 .setCustomId(customId)
-                .setPlaceholder(placeholder || 'Выберите пользователя')
+                .setPlaceholder(placeholder || i18n.t("builders.action_row.select_user"))
                 .setDisabled(Boolean(disabled))
             )
         ]
@@ -18,7 +19,7 @@ export default class ActionRowBuilder {
         .addComponents(
             new ChannelSelectMenuBuilder()
             .setCustomId(customId)
-            .setPlaceholder(placeholder || 'Выберите канал')
+            .setPlaceholder(placeholder || i18n.t("builders.action_row.select_channel"))
             .setDisabled(Boolean(disabled))
         )
     }
@@ -29,7 +30,7 @@ export default class ActionRowBuilder {
             new ButtonBuilder()
             .setStyle(ButtonStyle.Primary)
             .setCustomId('voiceChannel')
-            .setLabel('Выбрать текущий голосовой канал')
+            .setLabel(i18n.t("builders.action_row.select_current_voice_channel"))
             .setDisabled(Boolean(disabled))
         )  
     }
@@ -41,7 +42,7 @@ export default class ActionRowBuilder {
                 new ButtonBuilder()
                 .setStyle(ButtonStyle.Primary)
                 .setCustomId(`checkMembersPermission.${id}`)
-                .setLabel('Посмотреть права пользователей')
+                .setLabel(i18n.t("builders.action_row.view_users_perms"))
             )  
         ]
     }
@@ -53,13 +54,13 @@ export default class ActionRowBuilder {
 
         const row1 = new DJSActionRowBuilder<ButtonBuilder>()
         .addComponents(
-            new ButtonBuilder().setStyle(ButtonStyle.Secondary).setCustomId(`back.${channel.id}`).setLabel('Назад'),
-            new ButtonBuilder().setStyle(ButtonStyle.Secondary).setCustomId(`forward.${channel.id}`).setLabel('Вперед')
+            new ButtonBuilder().setStyle(ButtonStyle.Secondary).setCustomId(`back.${channel.id}`).setLabel(i18n.t("builders.action_row.back")),
+            new ButtonBuilder().setStyle(ButtonStyle.Secondary).setCustomId(`forward.${channel.id}`).setLabel(i18n.t("builders.action_row.forward"))
         )
 
         const row2 = new DJSActionRowBuilder<ButtonBuilder>()
         .addComponents(
-            new ButtonBuilder().setStyle(ButtonStyle.Primary).setCustomId(`leave.${channel.id}`).setLabel('Вернуться назад')
+            new ButtonBuilder().setStyle(ButtonStyle.Primary).setCustomId(`leave.${channel.id}`).setLabel(i18n.t("builders.action_row.return"))
         )
 
         const max = Math.ceil(array.length/5) === 0 ? 1 : Math.ceil(array.length/5)

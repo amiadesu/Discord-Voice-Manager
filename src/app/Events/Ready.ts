@@ -2,6 +2,7 @@ import { VoiceChannel, TextChannel, ActionRowBuilder, ButtonBuilder } from 'disc
 import EmbedBuilder from '../../strcut/utils/EmbedBuilder';
 import Event from '../../strcut/base/Event';
 import Client from '../../strcut/Client';
+import { i18n } from '../../i18n';
 
 export default new Event(
     {
@@ -9,34 +10,34 @@ export default new Event(
         once: true
     },
     async (client: Client) => {
-        client.logger.login(`Бот "${client.user!.tag}" зашел в сеть`)
+        client.logger.login(i18n.t("logs.bot_connected", { bot: client.user!.tag }))
 
-        client.config.guilds.forEach(
+        client.guildsConfig.forEach(
             async (config, guildId) => {
                 const guild = client.guilds.cache.get(guildId)
-                if(!guild) return client.logger.error('В конфиге серверов указан неправильно ID сервера или бота нет на сервера с указанным ID')
+                if(!guild) return client.logger.error(i18n.t("logs.no_guild_with_id"))
 
                 const voice = guild.channels.cache.get(config.channels.voice) as VoiceChannel
-                if(!voice) return client.logger.error(`В конфиге неправильно указан ID голосвого канала (${guild.name} | ${guild.id})`)
+                if(!voice) return client.logger.error(i18n.t("logs.no_voice_channel_with_id", { guild_name: guild.name, guild_id: guild.id }))
 
                 voice.members.map(async (member) => {
                     await member.voice.disconnect('Auto Voice Mod').catch(() => {})
                 })
 
                 const text = guild.channels.cache.get(config.channels.text) as TextChannel
-                if(!text) return client.logger.error(`В конфиге неправильно указан ID текстового канала (${guild.name} | ${guild.id})`)
+                if(!text) return client.logger.error(i18n.t("logs.no_text_channel_with_id", { guild_name: guild.name, guild_id: guild.id }))
 
                 text.messages.fetch().then((messages) => {
                     const fetch = messages.find((m) => m.id === config.message)
 
                     if(!fetch) {
-                        return text.send({embeds: [new EmbedBuilder().setTitle('Скопируйте ID этого сообщения и впишите в конфиг')]})
+                        return text.send({embeds: [new EmbedBuilder().setTitle(i18n.t("messages.copy_message_id"))]})
                     }
 
                     if(fetch.editable) {
                         const row1 = new ActionRowBuilder<ButtonBuilder>()
                         const row2 = new ActionRowBuilder<ButtonBuilder>()
-
+                        
                         for ( let i = 0; Object.keys(config.buttons).length > i; i++ ) {
                             if(1 >= (i+1) / 5) {
                                 row1.addComponents(

@@ -2,6 +2,7 @@ import { ButtonInteraction, UserSelectMenuInteraction } from 'discord.js';
 import EmbedBuilder from '../../../strcut/utils/EmbedBuilder';
 import IGuildConfig from '../../../types/GuildConfig';
 import Client from '../../../strcut/Client';
+import { i18n } from '../../../i18n';
 
 export default async (client: Client, button: ButtonInteraction<'cached'>, menu: UserSelectMenuInteraction<'cached'>, config: IGuildConfig) => {
     if(menu.users.size === 0) {
@@ -9,7 +10,7 @@ export default async (client: Client, button: ButtonInteraction<'cached'>, menu:
             embeds: [ new EmbedBuilder().default(
                 menu.member,
                 config.buttons[menu.customId]!.title,
-                `Вы **не** выбрали пользоваетля`
+                i18n.t("messages.user_not_selected")
             ) ],
             components: []
         })
@@ -22,7 +23,7 @@ export default async (client: Client, button: ButtonInteraction<'cached'>, menu:
             embeds: [ new EmbedBuilder().default(
                 menu.member,
                 config.buttons[menu.customId]!.title,
-                `Участник **сервера** не найден`
+                i18n.t("messages.user_not_found")
             ) ],
             components: []
         })
@@ -33,7 +34,7 @@ export default async (client: Client, button: ButtonInteraction<'cached'>, menu:
             embeds: [ new EmbedBuilder().default(
                 menu.member,
                 config.buttons[menu.customId]!.title,
-                `Вы **не** можете **забрать/выдать** право **говорить** самому себе`
+                i18n.t("messages.cannot_change_speak_perms.self")
             ) ],
             components: []
         })
@@ -57,7 +58,7 @@ export default async (client: Client, button: ButtonInteraction<'cached'>, menu:
         embeds: [ new EmbedBuilder().default(
             menu.member,
             config.buttons[menu.customId]!.title,
-            `Вы успешно **${state?'разрешили':'запретили'}** пользователю ${member.toString()} **говорить** в ${voice.toString()}`
+            i18n.t(`messages.speak_perms_change_success.${state ? 'allow' : 'deny'}`, { member_name: member.toString(), voice_name: voice.toString() })
         ) ],
         components: []
     })

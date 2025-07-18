@@ -1,6 +1,7 @@
 import { ButtonInteraction, UserSelectMenuInteraction } from 'discord.js';
 import EmbedBuilder from '../../../strcut/utils/EmbedBuilder';
 import IGuildConfig from '../../../types/GuildConfig';
+import { i18n } from '../../../i18n';
 
 export default async (button: ButtonInteraction<'cached'>, menu: UserSelectMenuInteraction<'cached'>, config: IGuildConfig) => {
     if(menu.users.size === 0) {
@@ -8,7 +9,7 @@ export default async (button: ButtonInteraction<'cached'>, menu: UserSelectMenuI
             embeds: [ new EmbedBuilder().default(
                 menu.member,
                 config.buttons[menu.customId]!.title,
-                `Вы **не** выбрали пользоваетля`
+                i18n.t("messages.user_not_selected")
             ) ],
             components: []
         })
@@ -21,7 +22,7 @@ export default async (button: ButtonInteraction<'cached'>, menu: UserSelectMenuI
             embeds: [ new EmbedBuilder().default(
                 menu.member,
                 config.buttons[menu.customId]!.title,
-                `Участник **сервера** не найден`
+                i18n.t("messages.user_not_found")
             ) ],
             components: []
         })
@@ -32,7 +33,7 @@ export default async (button: ButtonInteraction<'cached'>, menu: UserSelectMenuI
             embeds: [ new EmbedBuilder().default(
                 menu.member,
                 config.buttons[menu.customId]!.title,
-                `Вы **не** можете **сбросить** права самому себе`
+                i18n.t("messages.cannot_reset.self")
             ) ],
             components: []
         })
@@ -46,7 +47,7 @@ export default async (button: ButtonInteraction<'cached'>, menu: UserSelectMenuI
         embeds: [ new EmbedBuilder().default(
             menu.member,
             config.buttons[menu.customId]!.title,
-            `Вы успешно **сбросили** права пользователя ${member.toString()} в ${voice.toString()}`
+            i18n.t("messages.reset_success", { member_name: member.toString(), voice_name: voice.toString() })
         ) ],
         components: []
     })

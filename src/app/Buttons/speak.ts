@@ -4,18 +4,21 @@ import EmbedBuilder from '../../strcut/utils/EmbedBuilder';
 import Interaction from '../../strcut/base/Interaction';
 import IGuildConfig from '../../types/GuildConfig';
 import Client from '../../strcut/Client';
+import { i18n } from '../../i18n';
 
 export default new Interaction(
     'speak',
     async (client: Client, button: ButtonInteraction<'cached'> , config: IGuildConfig): Promise<any> => {
-        await button.deferReply({ephemeral: true, fetchReply: true })
+        await button.deferReply({ephemeral: true })
 
-        const fetch = await button.editReply({
+        const fetch = await button.fetchReply();
+
+        await button.editReply({
             embeds: [
                 new EmbedBuilder().default(
                     button.member,
                     config.buttons[button.customId]!.title,
-                    `укажите **пользователя**, которому Вы хотите **разрешить** или **запретить** в ${button.member.voice.channel!.toString()} **говорить**`
+                    i18n.t("messages.no_user_to_change_speak_perms_specified", { voice_name: button.member.voice.channel!.toString() })
                 )
             ],
             components: new ActionRowBuilder().menuUser('speak', config.placeholder.user)
@@ -39,7 +42,7 @@ export default new Interaction(
                         new EmbedBuilder().default(
                             button.member,
                             config.buttons[button.customId]!.title,
-                            `Вы **не** успели указать пользователя`
+                            i18n.t("messages.time_to_specify_user_has_expired")
                         )
                     ],
                     components: new ActionRowBuilder().menuUser('speak', config.placeholder.user, true)

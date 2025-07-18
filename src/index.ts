@@ -1,3 +1,10 @@
-console.clear()
 import Client from './strcut/Client';
-new Client().start()
+import { initI18n } from './i18n';
+
+async function main() {
+    console.clear();
+    await initI18n();
+    new Client().start();
+}
+
+main();

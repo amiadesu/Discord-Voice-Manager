@@ -2,6 +2,7 @@ import { ButtonInteraction, UserSelectMenuInteraction } from 'discord.js';
 import EmbedBuilder from '../../../strcut/utils/EmbedBuilder';
 import IGuildConfig from '../../../types/GuildConfig';
 import Client from '../../../strcut/Client';
+import { i18n } from '../../../i18n';
 
 export default async (client: Client, button: ButtonInteraction<'cached'>, menu: UserSelectMenuInteraction<'cached'>, config: IGuildConfig) => {
     if(menu.users.size === 0) {
@@ -9,7 +10,7 @@ export default async (client: Client, button: ButtonInteraction<'cached'>, menu:
             embeds: [ new EmbedBuilder().default(
                 menu.member,
                 config.buttons[menu.customId]!.title,
-                `Вы **не** выбрали пользоваетля`
+                i18n.t("messages.user_not_selected")
             ) ],
             components: []
         })
@@ -22,7 +23,7 @@ export default async (client: Client, button: ButtonInteraction<'cached'>, menu:
             embeds: [ new EmbedBuilder().default(
                 menu.member,
                 config.buttons[menu.customId]!.title,
-                `Участник **сервера** не найден`
+                i18n.t("messages.user_not_found")
             ) ],
             components: []
         })
@@ -33,7 +34,7 @@ export default async (client: Client, button: ButtonInteraction<'cached'>, menu:
             embeds: [ new EmbedBuilder().default(
                 menu.member,
                 config.buttons[menu.customId]!.title,
-                `Вы **не** можете **передать** ${menu.member.voice.channel!.toString()} боту`
+                i18n.t("messages.cannot_transfer_to.bot", { voice_name : menu.member.voice.channel!.toString() })
             ) ],
             components: []
         })
@@ -44,7 +45,7 @@ export default async (client: Client, button: ButtonInteraction<'cached'>, menu:
             embeds: [ new EmbedBuilder().default(
                 menu.member,
                 config.buttons[menu.customId]!.title,
-                `Вы **не** можете **передать** ${menu.member.voice.channel!.toString()} самому себе`
+                i18n.t("messages.cannot_transfer_to.self", { voice_name : menu.member.voice.channel!.toString() })
             ) ],
             components: []
         })
@@ -56,7 +57,7 @@ export default async (client: Client, button: ButtonInteraction<'cached'>, menu:
             embeds: [ new EmbedBuilder().default(
                 menu.member,
                 config.buttons[menu.customId]!.title,
-                `${member.toString()} **не** находится в ${voice.toString()}`
+                i18n.t("messages.user_not_in_voice", { member_name: member.toString(), voice_name: voice.toString() })
             ) ],
             components: []
         })
@@ -83,7 +84,7 @@ export default async (client: Client, button: ButtonInteraction<'cached'>, menu:
         embeds: [ new EmbedBuilder().default(
             menu.member,
             config.buttons[menu.customId]!.title,
-            `Вы успешно **передали** ${voice.toString()} пользователя ${member.toString()}. Ваши **права** в ${voice.toString()} были **сброшены**`
+            i18n.t("messages.transfer_success", { member_name: member.toString(), voice_name: voice.toString() })
         ) ],
         components: []
     })

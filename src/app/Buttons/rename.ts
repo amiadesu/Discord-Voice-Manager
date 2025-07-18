@@ -2,6 +2,7 @@ import { ActionRowBuilder, ButtonInteraction, ModalBuilder, TextInputBuilder, Te
 import Interaction from '../../strcut/base/Interaction';
 import IGuildConfig from '../../types/GuildConfig';
 import Client from '../../strcut/Client';
+import { i18n } from '../../i18n';
 
 export default new Interaction(
     'rename',
@@ -16,8 +17,8 @@ export default new Interaction(
                     new TextInputBuilder()
                     .setStyle(TextInputStyle.Short)
                     .setCustomId('name')
-                    .setLabel('Новое имя')
-                    .setPlaceholder('Укажите новое имя приватной комнаты')
+                    .setLabel(i18n.t("modals.rename.label"))
+                    .setPlaceholder(i18n.t("modals.rename.placeholder"))
                     .setValue(button.member.voice.channel!.name)
                     .setMaxLength(64)
                     .setMinLength(1)
